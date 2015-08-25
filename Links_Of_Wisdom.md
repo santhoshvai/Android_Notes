@@ -12,7 +12,8 @@
 
 ## App introduction screen
 * [Creating an intro screen for your app using ViewPager and PageTransformer
-— Part 1](https://medium.com/android-news/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f) - [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
+— Part 1](https://medium.com/android-news/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f) 
+  * [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
 
