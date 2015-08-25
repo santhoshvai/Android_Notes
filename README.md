@@ -1,2 +1,2 @@
 # Android_Notes
-The notes to keep track of what my brain wanted to keep not during my journey of learning Android.
+A repo that keeps track of what my brain wanted to keep note during my journey of learning Android.
