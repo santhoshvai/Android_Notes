@@ -1,3 +1,4 @@
+# Fundamentals
 * [The Real Best Practices to Save/Restore Activity's and Fragment's state.](http://inthecheesefactory.com/blog/fragment-state-saving-best-practices/en)
 * [Async task worries](https://plus.google.com/+prathamkesarkar/posts/bcLaHKVXLbM)
 * [Gravity and layout_gravity](http://stackoverflow.com/a/26190050/3394023)
@@ -14,6 +15,8 @@
 — Part 1](https://medium.com/android-news/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f) - [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
+
+# Misc
 
 ## Barcode scanner
 * https://github.com/dm77/barcodescanner
