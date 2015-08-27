@@ -53,7 +53,7 @@
     * How do the android system know which app will handle?
       * For example, if you want to show a location, Google maps activity, will have an intent filter like the one below,
         ![Imgur](http://i.imgur.com/QvvOpeU.png)
-
+      * Indicates that the Maps app, can handle the `VIEW` action on all data which has a `geo` scheme
     * this if statement takes care when there is no receiving apps in the user mobile.
 ```java
    if (intent.resolveActivity(getPackageManager()) != null) {
