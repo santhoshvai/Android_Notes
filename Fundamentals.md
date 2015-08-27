@@ -62,3 +62,7 @@
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
 ```
+
+  * [Broadcast Intents](https://www.youtube.com/watch?v=dvwjBQ5blnY) - sent to all apps
+    * Example, device is charging or low battery ( we can also send ourselves by using `sendBroadcast()` )
+    * If you want to recieve it, use a `BroadcastReceiver` with intent filter, to tell system that you wish to receive that specific broadcast
