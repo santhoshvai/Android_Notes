@@ -1,4 +1,5 @@
 # Fundamentals
+* [Android Architecture - A simple guide for MVC, MVP and MVVM on Android projects](https://medium.com/android-news/android-architecture-2f12e1c7d4db)
 * [The Real Best Practices to Save/Restore Activity's and Fragment's state.](http://inthecheesefactory.com/blog/fragment-state-saving-best-practices/en)
 * [Async task worries](https://plus.google.com/+prathamkesarkar/posts/bcLaHKVXLbM)
 * [Gravity and layout_gravity](http://stackoverflow.com/a/26190050/3394023)
