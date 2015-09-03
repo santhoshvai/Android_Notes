@@ -8,7 +8,7 @@
   * Same thing happens when another activity is called to fulfill an implicit intent and the user needs to make a seclection
   * To make efficient use of resources, use the `onPause` signal to adjust your app's resource burden.
   * So most updates through a UI can be paused when `onPause` is called.
-  * **Caution :** The app is still visible, so we shouldnt pause any processes that are drwaing your UI
+  * **Caution :** The app is still visible, so we shouldnt pause any processes that are drawing your UI
 
 * **Visible :** Continues whenever the app is at all visible, ends when it is completely obsucured by another app. (like user opening another app)
   * At this point app is moved to the background (after `onStop`)
