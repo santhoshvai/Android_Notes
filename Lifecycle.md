@@ -5,7 +5,7 @@
 
 * **Active :**  Activity is in the foreground and has focus
   * `onPause` is called as soon as the activity is partially obscured. Like in [this example of Permissions dialog](http://www.androidpolice.com/wp-content/uploads/2014/06/nexusae0_wm_Screenshot_2014-05-15-11-20-031.png)
-  * Same thing happens when another activity is called to fulfill an implicit intent and the user needs to make a seclection
+  * Same thing happens when another activity is called to fulfill an implicit intent and the user needs to make a selection
   * To make efficient use of resources, use the `onPause` signal to adjust your app's resource burden.
   * So most updates through a UI can be paused when `onPause` is called.
   * **Caution :** The app is still visible, so we shouldnt pause any processes that are drawing your UI
