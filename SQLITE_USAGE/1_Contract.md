@@ -37,7 +37,7 @@
 
 ![Imgur](http://i.imgur.com/lT62lbO.png)
 
-* `_ID` is the primary key of the location table and should be set to [autoincrement](http://www.tutorialspoint.com/sqlite/sqlite_using_autoincrement.htm)
+* `_ID` is the primary key and should be set to [autoincrement](http://www.tutorialspoint.com/sqlite/sqlite_using_autoincrement.htm)
 * `FOREIGN KEY` constraint enforces that the `LOCATION ID` is a valid `_ID`
   * In order to insert in weather table we have to insert in the location table
 
@@ -71,7 +71,9 @@ public class WeatherContract {
         public static final String COLUMN_LOC_KEY = "location_id";
         // Date, stored as long in milliseconds since the epoch
         public static final String COLUMN_DATE = "date";
-        ...........
+        ..
+        ..
+        ..
     }
 }
 ```
