@@ -30,7 +30,7 @@
     * Can be scheduled using an `inexact repeating alarm
     * **Sync adapter** - designed especially to schedule your background data syncs as efficiently as possible
     * **Google cloud messaging** - Even better!
-      * Lets you notify your async adapter of changes in the server side
+      * Lets you notify your sync adapter of changes in the server side
       * So you only initiate network requests, when you know that you have to do so!
 
 ## Intent
