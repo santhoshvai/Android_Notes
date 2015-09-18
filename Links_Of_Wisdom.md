@@ -27,7 +27,7 @@
 
 ## How to make your own library?
 * [How To Start Making Your Own Android Library with Android Studio](https://medium.com/@tigr/how-to-start-making-your-own-with-library-project-in-android-studio-22706a407780)
-* [https://medium.com/@tigr/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739](https://medium.com/@tigr/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739)
+* [How To Start Making Your Own Android Library with Android Studio](https://medium.com/@tigr/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739)
 
 ## What are these?
 * [Nice (handrawn) video explaining the MEASURE phase of the rendering pipeline, and why it can cause perf problems](https://plus.google.com/+ColtMcAnlis/posts/19P8hh6CZaP)
