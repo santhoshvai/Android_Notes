@@ -31,6 +31,9 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
   * Must be **manually incremented** each-time we release an updated APK with a new database schema
 * `DATABASE_NAME` : Actual name of the database file in the file-system
 *  These values are passed into the **constructor** to **initialise the database helper**
+
+### onCreate
+
 * **onCreate method:** Called when the database is created for the first time.
 ```java
     @Override
@@ -39,6 +42,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
                 LocationEntry._ID + " INTEGER PRIMARY KEY," +
+                // unique location
                 LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
                 LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
@@ -93,105 +97,28 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 LocationEntry.TABLE_NAME + " (" + LocationEntry._ID + "), " +
 ```
 
-## Test
-* Android has a built-in testing framework that allows us to create a test APK that executes a JUnit test that call into classes in our main APK.
-* **JUnit :** a [testing framework](http://www.tutorialspoint.com/junit/junit_quick_guide.htm) that allows us to run automated test suites
-* **Small example :**
+### onUpgrade
 
+* called when the database has already been created and the version has been changed.
+* **version change :**
+  * should signify that the columns, tables or general structure of the database has been changed.
+  * Make sure to change the version when you make changes to the database tables.
+  * *Why care?* : Because your app wont have errors when you make changes to the database tables.
+* **SQLiteOpenHelper** knows about this because the version we pass to its **constructor** has been changed
+* If the data that the table contains is user-generated we would want to preserve it.
+  * We would use [ALTER TABLE](https://www.sqlite.org/lang_altertable.html) to add new columns.
+* In below example, we simply delete the table.
 ```java
-package com.example.android.sunshine.app.data;
-
-import android.test.AndroidTestCase;
-
-public class TestPractice extends AndroidTestCase {
-    /*
-        This gets run before every test.
-     */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    public void testThatDemonstratesAssertions() throws Throwable {
-        int a = 5;
-        int b = 3;
-        int c = 5;
-        int d = 10;
-
-        assertEquals("X should be equal", a, c);
-        assertTrue("Y should be true", d > a);
-        assertFalse("Z should be false", a == b);
-
-        if (b > d) {
-            fail("XX should never happen");
-        }
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+@Override
+public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    // This database is only a cache for online data, so its upgrade policy is
+    // to simply to discard the data and start over
+    // Note that this only fires if you change the version number for your database.
+    // It does NOT depend on the version number for your application.
+    // If you want to update the schema without wiping data, commenting out the next 2 lines
+    // should be your top priority before modifying this method.
+    sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LocationEntry.TABLE_NAME);
+    sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
+    onCreate(sqLiteDatabase);
 }
 ```
-* `extends AndroidTestCase` :
-  * `setUp` : Run before each test
-  * `tearDown` : Run after each test
-* Add new methods in the class with prefix `test` : similar to JUnit
-  * Like `testThatDemonstratesAssertions`
-
-* **FullTestSuite.java**
-
-``` java
-package com.example.android.sunshine.app;
-
-import android.test.suitebuilder.TestSuiteBuilder;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class FullTestSuite extends TestSuite {
-    public static Test suite() {
-        return new TestSuiteBuilder(FullTestSuite.class)
-                .includeAllPackagesUnderHere().build();
-    }
-
-    public FullTestSuite() {
-        super();
-    }
-}
-```
-* Contains code to include all of the java test classes in its package into a suite of tests that JUnit will run
-* Each test should have atleast one check that uses an assert to see if the program supplies the correct output
-* Easily add additional tests
-  * By just adding additional java class files to our test directory
-* We will likely have a class like in each project we make
-  * They arent typically project specific ( except package name, duh! )
-  * So, literally this code can be *copy-pasted*
-
-### Running Tests
-
-**Option 1**
-
-  Right click on the folder androidTest and select Run > Tests in ‘com.exampl…. Make sure the select the Android logo (as shown below) and not the Gradle logo.
-
-  ![Imgur](http://i.imgur.com/oClkDZ2.png)
-
-  **Option 2**
-
-  Right next to the Run button, click on the drop down and select Edit Configurations.
-
-  ![Imgur](http://i.imgur.com/aicNLGt.png)
-
-  You’re going to make a “testing” configuration. To do this, click the + button and select Android Tests.
-
-  ![Imgur](http://i.imgur.com/44WROfU.png)
-
-  Make sure the module is app and name it something related, such as “Test Android”.
-
-  ![Imgur](http://i.imgur.com/LEtylib.png)
-
-  Then you can hit OK. Finally, press the run button, with your test configuration selected in the drop down, to run the tests.
-
-  ![Run the tests](http://i.imgur.com/N8NIqYm.png)
-
-  If you see any error messages when you try to run your tests, make sure there aren't any JUnit run configurations (we only want Android Tests). If there's anything under the JUnit dropdown in the left section, try deleting it (select it and click the - button).
