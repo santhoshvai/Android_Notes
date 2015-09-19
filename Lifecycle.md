@@ -35,7 +35,7 @@
   * It does that because it needs the resources used by the background app to keep the foreground app running smoothly.
 
 * As soon as the app is invisible, it is likely to die without notice but ready to return from the dead
-  * `onPause` and `onStop` are singmals that our app may be killed imminently
+  * `onPause` and `onStop` are signals that our app may be killed imminently
   * So clean up any resources that need an orderly teardown.
   * Some examples of listeners or updates to stop/close/disconnect are,
     * Any open connections or sockets 
