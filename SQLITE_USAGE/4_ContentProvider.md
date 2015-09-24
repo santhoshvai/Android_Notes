@@ -240,6 +240,7 @@ static UriMatcher buildUriMatcher() {
 * It will be used in the implementation of core Content Provider methods.
 
 ### Android Manifest
+
 * [Docs](http://developer.android.com/intl/zh-cn/guide/topics/manifest/provider-element.html)
 * We need to register our content provider class in the manifest so that the platform knows about it.
 
@@ -260,6 +261,7 @@ Like this,
 ```
 
 ### ContentResolver
+
 * Once the weather provider has been registered with the package manager, we can use an Android utility class called the `ContentResolver` to refer to it.
 * The ContentResolver locates our class using the Content Authority and makes direct calls to the weather provider on our behalf.
 
@@ -316,7 +318,6 @@ public String getType(Uri uri) {
 * Use the `sURIMatcher` to switch on the type of URI
 * Each response from this function will return a cursor that correspons to the incoming query as defined by the URI.
 * Setting the `notification URI` of the cursor to the one that was passed causes the cursor to *register a content observer*, to watch for changes that happen to that URI and any of its descendants. This allows the content provider to easily tell the UI when the cursor changes, on operations like database insert or update.
-* `SQLiteQueryBuilder` is a helper to compose SQL. They are used when we need to create joins, unions etc. If there is only one table then use `SQLiteDatabase.query()`. Because querybuilder uses an extra object. We miust use it only when needed. [Source](http://stackoverflow.com/questions/17230049/sqlitequerybuilder-query-vs-sqlitedatabase-query)
 
 ``` java
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
@@ -443,4 +444,74 @@ public String getType(Uri uri) {
        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
        return retCursor;
    }
+```
+*SQLiteQueryBuilder*
+
+* `SQLiteQueryBuilder` is a helper to compose SQL. They are used when we need to create joins, unions etc. If there is only one table then use `SQLiteDatabase.query()`. Because querybuilder uses an extra object. We must use it only when needed. [Source](http://stackoverflow.com/questions/17230049/sqlitequerybuilder-query-vs-sqlitedatabase-query)
+
+* in this case, it is initialized in the static constructor, describing the join between both tables.
+* `setTables` fills out the part in the front part of the SQL query. Note, since both tables have a field with `_ID`, we must explicitly use the table name to indicate specifically which ID we are talking about in the join.
+* The selection is defined using the question mark replacement syntax. The selection parameters will replace these values. Note that we fetch the parameters from the URI and built a string array so that they can substituted into our query.
+
+**insert()**
+
+* This function takes advantage of the URI matcher code. But it only requires the base URIs. That's because inserts are fundamentally simpler. We simply want to make sure that the right record winds up in the right table.
+* The data that is contained in the other URI, such as location and date, will actually be in the content values used in the insert. Note that if we wanted to, we could support all of the URIs here. But it makes the implementation of the insert function far more complicated.
+* when we insert into our database, we wanted to notify every content observer that might have data modified by our insert. It turns out that cursors register themselves as notify for descendants. Which means that notifying the root URI will also notify all descendants of the URI, ones that contain additional path information. Just like with calling our content providers. We can use a content resolver to notify our content observer.
+* As you can see, the root URI for each table in sunshine just contains the content scope, the authority, and the table name. consider a content URI that contains a date, it is a descendant of the plain weather content URI. If we notify based on anything other than the root URI, then a cursor listening on the root URI will not get notified of a change that would certainly impact it. So we have to be very careful when doing that.
+
+``` java
+@Override
+  public Uri insert(Uri uri, ContentValues values) {
+      final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+      final int match = sUriMatcher.match(uri);
+      Uri returnUri;
+
+      switch (match) {
+          case WEATHER: {
+              normalizeDate(values);
+              long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, values);
+              if ( _id > 0 )
+                  returnUri = WeatherContract.WeatherEntry.buildWeatherUri(_id);
+              else
+                  throw new android.database.SQLException("Failed to insert row into " + uri);
+              break;
+          }
+          default:
+              throw new UnsupportedOperationException("Unknown uri: " + uri);
+      }
+      getContext().getContentResolver().notifyChange(uri, null);
+      return returnUri;
+  }
+```
+
+* For weather, we just passed the parameters that came into the content provider into the database insert call. We should throw an exception if the insert fails. The only trick here is to make sure we return the correct value, which is a URI. A function to build these URIs was already made while making the contract, it contained the weather path followed by an ID.
+* If we were being complete in our content provider implementation, we should also implement these URI types in the contract URI matcher and query function. But the beautiful thing about implementing a content provider, especially if its only being used by your application, is that you only need to implement the features you use.
+
+**update() and delete()**
+
+``` java
+@Override
+    public int update(
+            Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rows;
+
+        switch (match) {
+            case WEATHER: {
+                rows = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+            case LOCATION: {
+                rows = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if (rows != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+        return rows;
+    }
 ```
