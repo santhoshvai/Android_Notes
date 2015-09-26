@@ -492,26 +492,143 @@ public String getType(Uri uri) {
 
 ``` java
 @Override
-    public int update(
-            Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int rows;
-
-        switch (match) {
-            case WEATHER: {
-                rows = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            }
-            case LOCATION: {
-                rows = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            }
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+public int delete(Uri uri, String selection, String[] selectionArgs) {
+    final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+    final int match = sUriMatcher.match(uri);
+    int rows;
+    // if selection is null it will delete all rows.
+    // passing 1 will remove all rows and return number of rows deleted
+    if (selection == null) selection = "1";
+    switch (match) {
+        case WEATHER: {
+            // if selection is null it will delete all rows.
+            rows = db.delete(WeatherContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
+            break;
         }
-        if (rows != 0)
-            getContext().getContentResolver().notifyChange(uri, null);
-        return rows;
+        case LOCATION: {
+            rows = db.delete(WeatherContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+            break;
+        }
+        default:
+            throw new UnsupportedOperationException("Unknown uri: " + uri);
     }
+    if (rows != 0)
+        getContext().getContentResolver().notifyChange(uri, null);
+    return rows;
+}
+
+@Override
+public int update(
+        Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+    final int match = sUriMatcher.match(uri);
+    int rows;
+
+    switch (match) {
+        case WEATHER: {
+            rows = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selectionselectionArgs);
+            break;
+        }
+        case LOCATION: {
+            rows = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selectionselectionArgs);
+            break;
+        }
+        default:
+            throw new UnsupportedOperationException("Unknown uri: " + uri);
+    }
+    if (rows != 0)
+        getContext().getContentResolver().notifyChange(uri, null);
+    return rows;
+}
 ```
+
+**bulkInsert()**
+
+* Optional method in the content provider
+* In SQLite, putting a bunch of inserts into a single transaction is much faster than inserting them individually. BulkInsert allows us to do that.
+* The default implementation just calls insert a bunch of times. But, we can wrap it in a transaction, if we implement ourselves.
+* In this case, only for weather we need to insert in bulk.
+``` java
+@Override
+public int bulkInsert(Uri uri, ContentValues[] values) {
+   final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+   final int match = sUriMatcher.match(uri);
+   switch (match) {
+       case WEATHER:
+           db.beginTransaction();
+           int returnCount = 0;
+           try {
+               for (ContentValues value : values) {
+                   normalizeDate(value);
+                   long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
+                   if (_id != -1) {
+                       returnCount++;
+                   }
+               }
+               db.setTransactionSuccessful();
+           } finally {
+               db.endTransaction();
+           }
+           getContext().getContentResolver().notifyChange(uri, null);
+           return returnCount;
+       default:
+           return super.bulkInsert(uri, values);
+   }
+}
+```
+
+* Note: If we do not set the transaction to be successful, the records will not be commited when we call `endTransaction()`.
+
+
+### Recap
+
+1. We started off by defining the URI's that our ContentProvider will support.
+2. We then updated our contract to reflect these URIs
+3.  We built a URIMatcher that matches these URIs to constants we use in switch statements in all of the other required content provider functions.
+4. Then we implemented the functions,
+  1. `getType()` function to return the type of cursor returned for each URI.
+  2.  We then implemented the contentProvider query functions, followed by the write operations insert, update, and delete.
+  3. finally, the bulkInsert function was implemented to make updates to our database in a single transaction. This performs much faster, and causes less wear and tear on the flash chip, compared to updating the database in multiple transaction. **There are a lot of libraries out there in the open-source world to help us build ContentProviders**. If we want to use them, we can use them with the confidence knowing how they they work and what they are doing.
+
+### Use them
+
+So, all queries and updates to the database can now be done through the contentProvider interface. But we are still not using them in our code. We need to change our code to store our weather information  in the database using the content provider we just built.  
+
+``` java
+/**
+    * Helper method to handle insertion of a new location in the weather database.
+    *
+    * @param locationSetting The location string used to request updates from the server.
+    * @param cityName A human-readable city name, e.g "Mountain View"
+    * @param lat the latitude of the city
+    * @param lon the longitude of the city
+    * @return the row ID of the added location.
+    */
+   long addLocation(String locationSetting, String cityName, double lat, double lon) {
+       // Students: First, check if the location with this city name exists in the db
+       Cursor cur = mContext.getContentResolver().query(WeatherContract.LocationEntry.CONTENT_URI,
+              new String[]{WeatherContract.LocationEntry._ID},
+               WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+               new String[]{locationSetting}, null);
+       long locationId;
+       // If it exists, return the current ID
+       if (cur.moveToFirst()) {
+           locationId = cur.getLong(0);
+       } else {
+           // Otherwise, insert it using the content resolver and the base URI
+           ContentValues testValues = new ContentValues();
+           testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
+           testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+           testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+           testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+           Uri uri = mContext.getContentResolver().insert(WeatherContract.LocationEntry.CONTENT_URI, testValues);
+           locationId = ContentUris.parseId(uri);
+       }
+       cur.close();
+       return locationId;
+   }
+```
+
+## But
+
+We really need to be querying things before requesting them from the internet. After all, the main point is to have a responsive application. We are still not updating the screen until after we have pulled data down from the web. We also want to avoid doing our query on the UI thread, because doing operations like queries on the UI thread cause Android to not be able to draw frames fast enough, which introduces frame jitter. Fortunately android offers a pattern for that known as **Loaders**.
