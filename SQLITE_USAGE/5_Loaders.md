@@ -109,4 +109,57 @@ The View passed into bindView is the View returned from newView. We know it’s 
 
 * [GH link to utility.java](https://github.com/udacity/Sunshine-Version-2/blob/4.18_cursor_adapter/app/src/main/java/com/example/android/sunshine/app/Utility.java)
 
-### Refactoring to use ForecastAdapter with Cursors and from the Fragment
+### Refactoring to use ForecastAdapter with Cursors and from the Fragment (TODO: Just copied and pasted this section, need edits)
+
+1. **Change mForecastAdapter's type**
+
+Change `mForecastAdapter`, to be an instance of `ForecastAdapter`.
+
+2. **Get Data from the Database**
+
+Let’s go to where we first need to populate the ForecastFragment with data and do so by getting the data from the database. Go to `onCreateView`. Use WeatherProvider to query the database the same way you are in FetchWeatherTask:
+
+``` java
+     String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+```
+
+3. **Make a new ForecastAdapter**
+
+Still in `onCreateView`, we have a Cursor cur, so let’s use our new ForecastAdapter. Create a new ForecastAdapter with the new cursor. The list will be empty the first time we run.
+
+``` java
+mForecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
+```
+
+4. **Delete OnItemClickListener**
+
+Because we changed the adapter, the OnItemClickListener in `ForecastFragment` for the ListView won’t work. Specifically this line `String forecast = mForecastAdapter.getItem(position);` is problematic because getItem with a CursorAdapter doesn’t return a string.
+
+Go ahead and remove or comment out this for now.
+
+We’ll talk more about this and correct this soon enough. Until then, our code will compile and run but not have access to our DetailView.
+
+5. **Clean up**
+
+Inside of `FetchWeatherTask`, we’re going to remove the formatting code and anything for updating the adapter. You can remove:
+
+* Any reference to `mForecastAdapter`
+* `getReadableDateString`, `formatHighLows`, `convertContentValuesToUXFormat`. These are all formatting functions and we’ve moved them to the ForecastAdapter.
+* The lines in `getWeatherDataFromJson` where we requery the database after the insert.
+* `PostExecute`
+
+**Note:** To keep your tests working, you'll need to modify line 42 of TestFetchWeatherTask to be:
+
+``` java
+FetchWeatherTask fwt = new FetchWeatherTask(getContext());
+```
+
+To see all of the changes in the codebase, check out this [diff](https://github.com/udacity/Sunshine-Version-2/compare/4.17_bulkinserts_with_contentprovider...4.18_cursor_adapter).
