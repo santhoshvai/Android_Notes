@@ -111,11 +111,11 @@ The View passed into bindView is the View returned from newView. We know it’s 
 
 ### Refactoring to use ForecastAdapter with Cursors and from the Fragment (TODO: Just copied and pasted this section, need edits)
 
-1. **Change mForecastAdapter's type**
+* **Change mForecastAdapter's type**
 
 Change `mForecastAdapter`, to be an instance of `ForecastAdapter`.
 
-2. **Get Data from the Database**
+* **Get Data from the Database**
 
 Let’s go to where we first need to populate the ForecastFragment with data and do so by getting the data from the database. Go to `onCreateView`. Use WeatherProvider to query the database the same way you are in FetchWeatherTask:
 
@@ -131,7 +131,7 @@ Let’s go to where we first need to populate the ForecastFragment with data and
                 null, null, null, sortOrder);
 ```
 
-3. **Make a new ForecastAdapter**
+* **Make a new ForecastAdapter**
 
 Still in `onCreateView`, we have a Cursor cur, so let’s use our new ForecastAdapter. Create a new ForecastAdapter with the new cursor. The list will be empty the first time we run.
 
@@ -139,7 +139,7 @@ Still in `onCreateView`, we have a Cursor cur, so let’s use our new ForecastAd
 mForecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
 ```
 
-4. **Delete OnItemClickListener**
+* **Delete OnItemClickListener**
 
 Because we changed the adapter, the OnItemClickListener in `ForecastFragment` for the ListView won’t work. Specifically this line `String forecast = mForecastAdapter.getItem(position);` is problematic because getItem with a CursorAdapter doesn’t return a string.
 
@@ -147,7 +147,7 @@ Go ahead and remove or comment out this for now.
 
 We’ll talk more about this and correct this soon enough. Until then, our code will compile and run but not have access to our DetailView.
 
-5. **Clean up**
+* **Clean up**
 
 Inside of `FetchWeatherTask`, we’re going to remove the formatting code and anything for updating the adapter. You can remove:
 
@@ -163,3 +163,98 @@ FetchWeatherTask fwt = new FetchWeatherTask(getContext());
 ```
 
 To see all of the changes in the codebase, check out this [diff](https://github.com/udacity/Sunshine-Version-2/compare/4.17_bulkinserts_with_contentprovider...4.18_cursor_adapter).
+
+### Leveraging Loaders
+
+**Create a cursorLoader in three easy steps**
+
+1. Create an Integer constant for a Loader ID.
+  * A single activity can use multiple Loaders and they are differentiated by these IDs.
+  * `private static final int MY_LOADER_ID = [MY ID]`
+2. Fill in Loader callbacks
+  * They are a generic interface class with one parameterized type
+  * When we use the loader callbacks with a cursor loader, the parameterized type we use is cursor.
+  * `Loader<cursor> onCreateLoader(int i, Bundle bundle)`.
+    * The most interesting one for us.
+    * Returns a loader with parameterized type, cursor. This is where we create and return our cursorLoader.
+    * cursorLoader has a constructor that takes all of the standard content provider query parameters, and will call the content provider on our behalf, when it is executed by the the loaderManager. `return new cursorLoader([context], [URI], [Projection], [Selection], [SelectionArgs], [SortOrder])`
+    * since cursorLoader derives an Async TaskLoader, it will be executed in a *background thread.*
+  * `void onLoadFinished(Loader<cursor> cursorLoader, Cursor cursor)`
+    * called when the loader completes, and our data is ready.
+    * To use the data in our cursor adapter, we just call `cursorAdapter swapCursor(cursor);`.
+    * But this is where we would also perform any other UI updates we would want to make when the data is ready.
+  * `void onLoaderReset(Loader<cursor> cursorLoader, Cursor cursor)`
+    * Typically only called when our loader is being destroyed.
+    * It means we need to remove all references to the loader data.
+    * to do that we call swap cursor on our cursor adapter with null. `cursorAdapter swapCursor(null);`
+3. Initialize Loader with LoaderManager
+  * `getLoaderManager().initLoader([loaderID], [Bundle], [loaderCallback]);`
+  * **when loading in a fragment we should do this in the `onActivitycreated` method**
+
+[Documentation on loaders](http://developer.android.com/guide/components/loaders.html)
+[Documentation on CursorLoader](http://developer.android.com/reference/android/content/CursorLoader.html)
+
+* **NOTE:** We will want to pass zero in for the flags when you create the cursor adapter as the loader will now be responsible for requiring when data changes.
+* Use support library
+
+``` java
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.content.CursorLoader;
+```
+
+**CODE**
+
+``` java
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+private ForecastAdapter mForecastAdapter;
+private static final int MY_LOADER_ID = 7;
+
+@Override
+public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    getLoaderManager().initLoader(MY_LOADER_ID, null, this);
+}
+
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                         Bundle savedInstanceState) {
+
+    // The CursorAdapter will take data from our cursor and populate the ListView
+    // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
+    // up with an empty list the first time we run.
+    mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+
+    View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+    // Get a reference to the ListView, and attach this adapter to it.
+    ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+    listView.setAdapter(mForecastAdapter);
+
+    return rootView;
+}
+
+@Override  
+public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+      String locationSetting = Utility.getPreferredLocation(getActivity());
+      // Sort order:  Ascending, by date.      
+      String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";      
+      Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(              locationSetting, System.currentTimeMillis());
+      return new CursorLoader(getActivity(), weatherForLocationUri,  null, null, null, sortOrder);
+}
+@Override
+public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    // Swap the new cursor in.  (The framework will take care of closing the
+    // old cursor once we return.)
+    mForecastAdapter.swapCursor(data);
+}
+
+@Override
+public void onLoaderReset(Loader<Cursor> loader) {
+    // This is called when the last Cursor provided to onLoadFinished()
+    // above is about to be closed.  We need to make sure we are no
+    // longer using it.
+    mForecastAdapter.swapCursor(null);
+}
+}
