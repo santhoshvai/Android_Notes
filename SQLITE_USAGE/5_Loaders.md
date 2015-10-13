@@ -258,3 +258,34 @@ public void onLoaderReset(Loader<Cursor> loader) {
     mForecastAdapter.swapCursor(null);
 }
 }
+```
+
+### Leveraging projections
+
+* Whenever we query the database, we get a cursor back that contains columns. Each column has an integer index assigned to it. Up until now, we had call `getColumnIndex` for each column in order to get this index. But there is a way to avoid doing that.
+* We can create a projection which is just an array of the columns we want to return in our cursor. This is more efficient because we are only fetching the data we need to use and **since the database always returns the columns in the order we specify,** we can rely on the indices matching the order from our projection. So we can then just use these indices to get information from our cursor.
+* One minor note: Since we are doing a join on our weather with location queries, we have to specify which ID we want to explicitly in our projection by adding the table name followed by a dot before the column name, as in this example.
+
+``` java
+private static final String[] FORECAST_COLUMNS = {
+  WeatherEntry.TABLE_NAME + "." + WeatherEntry._ID,
+  WeatherEntry.COLUMN_DATE,
+  WeatherEntry.COLUMN_SHORT_DESC,
+  WeatherEntry.COLUMN_MAX_TEMP,
+  WeatherEntry.COLUMN_MIN_TEMP,
+}
+```
+
+* In the same manner, in detail view using cursor loader, the uri sent using intent can be used to get the detail weather string.
+
+### Making content provider available to 3rd party apps
+
+![Making your ContentProvider Accessible](http://i.imgur.com/ElJf3FW.png)
+
+* It is straightforward to make your apps content provider available to third party apps.
+* The key is to modify the export flag in the manifest entry to true.
+* As simple as that, any app that knows the content URI can use the content resolver to access it, the same way that you do.
+* Now depending on the sensitivity of your data, you may want to protect it by requiring specific permissions to read or write the database.
+* So if you want to, you can effectively limit access only to other apps you've created, or to third party apps which know other permissions and users agree to.
+* Then you need to just publish this contract to interact with the content provider. Specifically the URI and column names.
+* **And as simple as that, you've created a new API just for your data.** This is exactly the same approach used by many of the native content providers, including the context database, media store, calendar and call log.
