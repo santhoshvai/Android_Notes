@@ -61,6 +61,7 @@
         } else {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
+   }
 ```
 
   * [Broadcast Intents](https://www.youtube.com/watch?v=dvwjBQ5blnY) - sent to all apps
