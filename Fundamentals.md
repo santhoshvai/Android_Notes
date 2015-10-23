@@ -8,7 +8,7 @@
   * Network calls
   * Decoding bitmaps
   * Reading & writing from the database
-  
+
 * **Async task is not always optimal**
   * You should always seek to eliminate the refresh button
   * A good app should **gives you what you want before you ask for it**
@@ -18,13 +18,13 @@
     * If its tied to an activity and if the screen rotates the transfer will be terminated
 
 ### Better ways to sync
-  
+
   * Where to use AsyncTask
     * Lifecycle is tied to the host activity
     * Expected to run for only a second or two
     * **Never use on network calls** because it is unwise to assume that it is gonna happen quickly
-  
-  
+
+
   * **Service** - A better alternative
     * Its an application component without an UI thats less likely to be interrupted
     * Can be scheduled using an `inexact repeating alarm
@@ -66,3 +66,23 @@
   * [Broadcast Intents](https://www.youtube.com/watch?v=dvwjBQ5blnY) - sent to all apps
     * Example, device is charging or low battery ( we can also send ourselves by using `sendBroadcast()` )
     * If you want to recieve it, use a `BroadcastReceiver` with intent filter, to tell system that you wish to receive that specific broadcast
+
+## Design principles
+
+* Users judge the quality of your app within the **first 30 seconds.**
+* A disproportionate amount of that judgement will be based not on functionality, but on the visual aesthetics.
+  * Does it look polished?
+  * Does it look professional?
+  * How easy is it to use?
+  * More than just looking pretty, the entire user experience is critically important.
+* With 30 seconds to win users over, its critical that that onboarding process,that time and effort required to go from downloading your app to performing its main function should be as **short and frictionless** as possible.
+* Not only that, but a well designed app should evoke a visceral reaction that speaks to the subconscious.
+* It should be fun to use.
+* It should surprise in delightful ways through **subtle animations and smooth transitions** that contribute to a feeling of power and effortlessness.
+* It should let users touch and interact with objects directly, instead of having to use buttons and menus.
+* It should use rich imagery and pictures in place of lots of words and long sentences.
+* It allows users to customize your app, to make it theirs while providing beautiful and sensible defaults.
+* **Create something that works like magic, learning your preference in the context provided by the device, so it never asks users for information that they've already provided.**
+* Provide simple shortcuts to complete complex tasks, and remember data settings and customizations making them available across every device.
+* While it's good practice to create a familiar and welcoming experience by creating a look and feel that's consistent with the platforms, styles and themes, its just as important to remember that this and all the other principles discussed here, **are realy just a starting point for your own creative vision.**
+* Deviation from the guidelines is encouraged, but when you do so, deviate with purpose.
