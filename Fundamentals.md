@@ -34,6 +34,7 @@
       * So you only initiate network requests, when you know that you have to do so!
 
 ## Intent
+
   * Example, When **Main activity** has to call **Detail activity**, `startActivity(Intent)` is used.
   * It is used when, App components need to, (Intents identify the target destination)
     * communicate with each other
