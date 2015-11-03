@@ -6,6 +6,8 @@
 * [6 THINGS I WISH I KNEW BEFORE I WROTE MY FIRST ANDROID APP](http://www.philosophicalhacker.com/2015/07/09/6-things-i-wish-i-knew-before-i-wrote-my-first-android-app/)
 
 # Design
+## Views
+* [Learn how to make custom views with Animations](https://vimeo.com/127799187)
 
 ## Design support library
 * [Codelab for Android Design Support Library](http://inthecheesefactory.com/blog/android-design-support-library-codelab/en)
