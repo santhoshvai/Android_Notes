@@ -23,6 +23,8 @@
 
 # Misc
 
+## [All conferences](https://github.com/AndroidStudyGroup/conferences/wiki)
+
 ## Barcode scanner
 * https://github.com/dm77/barcodescanner
 * https://search-codelabs.appspot.com/codelabs/bar-codes#1
