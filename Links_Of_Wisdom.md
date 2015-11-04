@@ -23,6 +23,9 @@
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
 
+# Performance
+* [Automated Performance testing codelab by google](http://www.code-labs.io/codelabs/android-perf-testing/index.html#0)
+
 # Misc
 
 ## [All conferences](https://github.com/AndroidStudyGroup/conferences/wiki)
