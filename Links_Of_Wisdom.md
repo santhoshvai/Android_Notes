@@ -10,6 +10,8 @@
 * [Learn how to make custom views with Animations](https://vimeo.com/127799187)
 
 ## Design support library
+* [Build a material design lab with support library - from google codelab](http://www.code-labs.io/codelabs/material-design-style/index.html?index=..%2F..%2Findex#0)
+* [Mastering the Coordinator Layout](http://saulmm.github.io/mastering-coordinator/)
 * [Codelab for Android Design Support Library](http://inthecheesefactory.com/blog/android-design-support-library-codelab/en)
 * [Exploring the new Android Design Support Library](https://medium.com/ribot-labs/exploring-the-new-android-design-support-library-b7cda56d2c32)
 * [Collapsible toolbar](https://plus.google.com/117115150007173229409/posts/GHc4F69LjwX)
