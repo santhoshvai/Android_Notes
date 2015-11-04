@@ -4,6 +4,7 @@
 * [Async task worries](https://plus.google.com/+prathamkesarkar/posts/bcLaHKVXLbM)
 * [Gravity and layout_gravity](http://stackoverflow.com/a/26190050/3394023)
 * [6 THINGS I WISH I KNEW BEFORE I WROTE MY FIRST ANDROID APP](http://www.philosophicalhacker.com/2015/07/09/6-things-i-wish-i-knew-before-i-wrote-my-first-android-app/)
+* [A full android app stack - movies app](https://github.com/saulmm/Material-Movies)
 
 # Design
 ## Views
