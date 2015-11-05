@@ -7,6 +7,7 @@
 * [A full android app stack - movies app](https://github.com/saulmm/Material-Movies)
 
 # Design
+
 ## Views
 * [Learn how to make custom views with Animations](https://vimeo.com/127799187)
 
@@ -23,6 +24,9 @@
   * [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
+
+## Color
+* [Find font colour based on background color](http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023)
 
 # Performance
 * [Automated Performance testing codelab by google](http://www.code-labs.io/codelabs/android-perf-testing/index.html#0)
