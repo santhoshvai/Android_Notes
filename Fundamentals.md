@@ -20,7 +20,7 @@
 ### Better ways to sync
 
   * Where to use AsyncTask
-    * Lifecycle is tied to the host activity
+    * Lifecycle is poorly tied to the host activity [SO](http://stackoverflow.com/a/13082084/3394023)
     * Expected to run for only a second or two
     * **Never use on network calls** because it is unwise to assume that it is gonna happen quickly
 
