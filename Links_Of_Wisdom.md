@@ -4,12 +4,16 @@
 * [Async task worries](https://plus.google.com/+prathamkesarkar/posts/bcLaHKVXLbM)
 * [Gravity and layout_gravity](http://stackoverflow.com/a/26190050/3394023)
 * [6 THINGS I WISH I KNEW BEFORE I WROTE MY FIRST ANDROID APP](http://www.philosophicalhacker.com/2015/07/09/6-things-i-wish-i-knew-before-i-wrote-my-first-android-app/)
+* [A full android app stack - movies app](https://github.com/saulmm/Material-Movies)
 
 # Design
+
 ## Views
 * [Learn how to make custom views with Animations](https://vimeo.com/127799187)
 
 ## Design support library
+* [Build a material design app with support library - from google codelab](http://www.code-labs.io/codelabs/material-design-style/index.html?index=..%2F..%2Findex#0)
+* [Mastering the Coordinator Layout](http://saulmm.github.io/mastering-coordinator/)
 * [Codelab for Android Design Support Library](http://inthecheesefactory.com/blog/android-design-support-library-codelab/en)
 * [Exploring the new Android Design Support Library](https://medium.com/ribot-labs/exploring-the-new-android-design-support-library-b7cda56d2c32)
 * [Collapsible toolbar](https://plus.google.com/117115150007173229409/posts/GHc4F69LjwX)
@@ -20,6 +24,12 @@
   * [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
+
+## Color
+* [Find font colour based on background color](http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023)
+
+# Performance
+* [Automated Performance testing codelab by google](http://www.code-labs.io/codelabs/android-perf-testing/index.html#0)
 
 # Misc
 
