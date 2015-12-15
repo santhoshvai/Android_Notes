@@ -73,3 +73,11 @@ Service --------- IntentService (for executing background tasks)
   * Have a content provider marked as syncable
   * Enable automatic sync for the syncAdapter
   * Set the interval in seconds
+
+### Inexact repeating alarms
+
+* infinitely better than exact repeating alarms but far from ideal.
+* the problem with any kind of repeating alarm is that its *still polling your server to check for updates*. The more frequently you poll, the fresher the data you can display. But the higher the cost in battery life.
+* *Google cloud messaging* lets your server notify your app directly when there is data ready to be downloaded. Or even include the new data in the message payload itself. Using GCM, you can send data from your server to any installed instance of your app via the google cloud.
+* These messages can be simple tickles that trigger a sync adapter by notifying your app that there is new data ready to download. Or you can include the new data in the message payload.
+* [Developer guide for Google Cloud Messaging](http://developer.android.com/google/gcm/index.html)
