@@ -62,9 +62,18 @@ Service --------- IntentService (for executing background tasks)
 
 ### Transferring data without draining battery
 
-* basically cell radio drains batter life. So the more time it goes to idle state it is better. It takes 30 seconds to go to idle state from active state. So you want to fetch most data you can in one shot! (balance is needed with what data you ll use and what you fetch)
+* basically cell radio drains batter life. So the more time it goes to idle state it is better. So you want to fetch most data you can in one shot! (balance is needed with what data you ll use and what you fetch)
 * [Transferring Data Without Draining the Battery ](http://developer.android.com/training/efficient-downloads/index.html)
 * [DevBytes: Efficient Data Transfers](https://www.youtube.com/watch?v=cSIB2pDvH3E&list=PLWz5rJ2EKKc-VJS9WQlj9xM_ygPopZ-Qd)
+
+```
+(Taken from developer docs -- Transferring Data Without Draining the Battery)
+
+Every time you initiate a connection—irrespective of the size of the associated data transfer—you potentially cause the radio to draw power for nearly 20 seconds when using a typical 3G wireless radio. An app that pings the server every 20 seconds, just to acknowledge that the app is running and visible to the user, will keep the radio powered on indefinitely, resulting in a significant battery cost for almost no actual data transfer.
+
+With that in mind it's important to bundle your data transfers and create a pending transfer queue. Done correctly, you can effectively phase-shift transfers that are due to occur within a similar time window, to make them all happen simultaneously—ensuring that the radio draws power for as short a duration as possible.
+```
+
 * There's a lot to learn with making background transactions efficient, but the good news is that Android gives you the SyncManager framework that implements many of these best practices.You utilize that framework by implementing a SyncAdapter. The framework, originally introduced in Android 2.0 Eclair or Android API level 5, allows Android applications to leverage the same basic framework that Google apps use for efficient synchronization. Ultimately, it's a centralized place to put all of the device data transfers in one place. So that they all be scheduled intelligently by the OS. 
 * Android **SyncManager** handles synchronization requests using **SyncAdapters**. The SyncManager batches and time shifts these requests, when possible, to allow your data transfers to be scheduled with transfers from other apps, **all working towards the goal of reducing the number of times the system has to switch on the radio**. If your device has less memory, it will schedule fewer simultaneous synchs. The SyncManager also takes care of things like checking for network connectivity before initiating transfers and retrying downloads when connectivity is dropped. 
 * The synchronization framework works with content providers for two way synchronization and leverages the Android Account Manager to provide synchronization services that are tied to accounts. 
