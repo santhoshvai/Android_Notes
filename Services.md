@@ -72,6 +72,10 @@ Service --------- IntentService (for executing background tasks)
 Every time you initiate a connection—irrespective of the size of the associated data transfer—you potentially cause the radio to draw power for nearly 20 seconds when using a typical 3G wireless radio. An app that pings the server every 20 seconds, just to acknowledge that the app is running and visible to the user, will keep the radio powered on indefinitely, resulting in a significant battery cost for almost no actual data transfer.
 
 With that in mind it's important to bundle your data transfers and create a pending transfer queue. Done correctly, you can effectively phase-shift transfers that are due to occur within a similar time window, to make them all happen simultaneously—ensuring that the radio draws power for as short a duration as possible.
+
+The underlying philosophy of this approach is to transfer as much data as possible during each transfer session in an effort to limit the number of sessions you require.
+
+That means you should batch your transfers by queuing delay tolerant transfers, and preempting scheduled updates and prefetches, so that they are all executed when time-sensitive transfers are required. Similarly, your scheduled updates and regular prefetching should initiate the execution of your pending transfer queue.
 ```
 
 * There's a lot to learn with making background transactions efficient, but the good news is that Android gives you the SyncManager framework that implements many of these best practices.You utilize that framework by implementing a SyncAdapter. The framework, originally introduced in Android 2.0 Eclair or Android API level 5, allows Android applications to leverage the same basic framework that Google apps use for efficient synchronization. Ultimately, it's a centralized place to put all of the device data transfers in one place. So that they all be scheduled intelligently by the OS. 
