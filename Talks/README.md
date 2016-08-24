@@ -1,7 +1,10 @@
-[![Android Application Architecture (Android Dev Summit 2015)](http://i.imgur.com/1AScb6h.png)](http://www.youtube.com/watch?v=BlkJzgjzL0c)
+# What is this?
 
-### API Design
+These are videos of android talks that I liked. With additional notes and transcripts.
 
-* Design your backend for the client
-* Process as much as you can on the server
-* Pass metadata to the client
+## Tools
+
+* [Convert subtitles to transcripts](http://corpus.wordish.org/hacks/hack-39-convert-subtitles-to-plain-text)
+* [Create image with play button](http://www.giikers.com/iwc/)
+* Youtube video 320x160 thumbnail - http://img.youtube.com/vi/VIDEO-ID/mqdefault.jpg
+* [Download subtitles from Youtube videos](http://downsub.com/)
