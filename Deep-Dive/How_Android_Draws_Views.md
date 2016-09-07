@@ -71,6 +71,8 @@ Most important part where the logic for your view happens. Draw canvas here..
 
 # More on this
 
+* [2016 - Measure, Layout, Draw, Repeat: Custom Views and ViewGroups - Huyen Tue Dao](https://realm.io/news/360andev-huyen-tue-dao-measure-layout-draw-repeat-custom-views-and-viewgroups-android/)
+
 * [Google I/O 2013 - Writing Custom Views for Android
 ](https://www.youtube.com/watch?v=NYtB6mlu7vA)
 
