@@ -63,7 +63,7 @@ Most important part where the logic for your view happens. Draw canvas here..
 
 [How to draw is given in detail in docs](https://developer.android.com/guide/topics/graphics/2d-graphics.html)
 
-* **NOTE: ** Call ``view.invalidate()`` to force a ``Draw()``
+* **NOTE:** Call ``view.invalidate()`` to force a ``Draw()``
 
 # References
 
