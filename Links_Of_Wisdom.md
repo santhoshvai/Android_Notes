@@ -8,19 +8,29 @@
 
 # Design
 
+* [Building a responsive UI in Android - Medium - Really nice!](https://medium.com/google-developers/building-a-responsive-ui-in-android-7dc7e4efcbb3)
+* [Use android:theme and ThemeOverlay to theme specific Views and their descendents - Google+ - Nice!](https://plus.google.com/u/0/+AndroidDevelopers/posts/JXHKyhsWHAH)
+* [Intercepting everything with CoordinatorLayout Behaviors](https://medium.com/google-developers/intercepting-everything-with-coordinatorlayout-behaviors)
+* [Tabs and ViewPager  - YouTube](https://www.youtube.com/watch?v=zQekzaAgIlQ)
+* [Layout Attributes and you](https://medium.com/google-developers/layouts-attributes-and-you-9e5a4b4fe32c)
+
+## CoordinatorLayout and related
+* [AppBarLayout and scrolling gestures - YouTube](https://www.youtube.com/watch?v=THadGrPeSJM)
+* [Intercepting everything with CoordinatorLayout Behaviors - Medium](https://medium.com/google-developers/intercepting-everything-with-coordinatorlayout-behaviors)
+* [Mastering the Coordinator Layout - Blog](http://saulmm.github.io/mastering-coordinator/)
+
 ## Views
-* [Learn how to make custom views with Animations](https://vimeo.com/127799187)
+* [Learn how to make custom views with Animations - Video - Vimeo](https://vimeo.com/127799187)
 
 ## Design support library
-* [Build a material design app with support library - from google codelab](http://www.code-labs.io/codelabs/material-design-style/index.html?index=..%2F..%2Findex#0)
-* [Mastering the Coordinator Layout](http://saulmm.github.io/mastering-coordinator/)
+* [Build a material design app with support library - from google codelab - always updated - check them again and again!](https://codelabs.developers.google.com/codelabs/material-design-style/index.html)
 * [Codelab for Android Design Support Library](http://inthecheesefactory.com/blog/android-design-support-library-codelab/en)
 * [Exploring the new Android Design Support Library](https://medium.com/ribot-labs/exploring-the-new-android-design-support-library-b7cda56d2c32)
 * [Collapsible toolbar](https://plus.google.com/117115150007173229409/posts/GHc4F69LjwX)
 
 ## App introduction screen
 * [Creating an intro screen for your app using ViewPager and PageTransformer
-— Part 1](https://medium.com/android-news/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f) 
+— Part 1](https://medium.com/android-news/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f)
   * [Reddit discussion](https://www.reddit.com/r/androiddev/comments/3fe5n6/creating_an_intro_screen_for_your_apps_using/)
 * [A cool library to add an app intro screen](https://github.com/PaoloRotolo/AppIntro)
 * [Great animations with PageTransformer](https://medium.com/@BashaChris/the-android-viewpager-has-become-a-fairly-popular-component-among-android-apps-its-simple-6bca403b16d4)
