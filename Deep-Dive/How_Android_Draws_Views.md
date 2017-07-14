@@ -45,11 +45,9 @@ Information about how big the ViewParent wants this view to be. Essentially, the
 
 ## ``onLayout``
 
-```(boolean changed,
-                int left,
-                int top,
-                int right,
-                int bottom)```
+```
+(boolean changed,int left,int top,int right,int bottom)
+```
 
 the l,t,r,b are the information about where the parent wants the view to be. This method is overided only when we want to make viewGroups, suppose we have a viewGroup all its children will be nested inside. You would then layout your children based on their l,t,r,b within your l,t,r,b.
 
